@@ -3,28 +3,21 @@
 
 
 neopixelAnalyzerSettings::neopixelAnalyzerSettings()
-:	mInputChannel( UNDEFINED_CHANNEL ),
-	mBitRate( 9600 )
+:    mInputChannel( UNDEFINED_CHANNEL ),
+    mBitRate(800000)
 {
-	mInputChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
-	mInputChannelInterface->SetTitleAndTooltip( "Serial", "Standard NeoPixel" );
-	mInputChannelInterface->SetChannel( mInputChannel );
+    mInputChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
+    mInputChannelInterface->SetTitleAndTooltip( "Data", "Standard NeoPixel" );
+    mInputChannelInterface->SetChannel( mInputChannel );
 
-	mBitRateInterface.reset( new AnalyzerSettingInterfaceInteger() );
-	mBitRateInterface->SetTitleAndTooltip( "Bit Rate (Bits/S)",  "Specify the bit rate in bits per second." );
-	mBitRateInterface->SetMax( 6000000 );
-	mBitRateInterface->SetMin( 1 );
-	mBitRateInterface->SetInteger( mBitRate );
+    AddInterface( mInputChannelInterface.get() );
 
-	AddInterface( mInputChannelInterface.get() );
-	AddInterface( mBitRateInterface.get() );
+    AddExportOption( 0, "Export as text/csv file" );
+    AddExportExtension( 0, "text", "txt" );
+    AddExportExtension( 0, "csv", "csv" );
 
-	AddExportOption( 0, "Export as text/csv file" );
-	AddExportExtension( 0, "text", "txt" );
-	AddExportExtension( 0, "csv", "csv" );
-
-	ClearChannels();
-	AddChannel( mInputChannel, "Serial", false );
+    ClearChannels();
+    AddChannel( mInputChannel, "NeoPixel", false );
 }
 
 neopixelAnalyzerSettings::~neopixelAnalyzerSettings()
@@ -33,41 +26,37 @@ neopixelAnalyzerSettings::~neopixelAnalyzerSettings()
 
 bool neopixelAnalyzerSettings::SetSettingsFromInterfaces()
 {
-	mInputChannel = mInputChannelInterface->GetChannel();
-	mBitRate = mBitRateInterface->GetInteger();
+    mInputChannel = mInputChannelInterface->GetChannel();
 
-	ClearChannels();
-	AddChannel( mInputChannel, "NeoPixel", true );
+    ClearChannels();
+    AddChannel( mInputChannel, "NeoPixel", true );
 
-	return true;
+    return true;
 }
 
 void neopixelAnalyzerSettings::UpdateInterfacesFromSettings()
 {
-	mInputChannelInterface->SetChannel( mInputChannel );
-	mBitRateInterface->SetInteger( mBitRate );
+    mInputChannelInterface->SetChannel( mInputChannel );
 }
 
 void neopixelAnalyzerSettings::LoadSettings( const char* settings )
 {
-	SimpleArchive text_archive;
-	text_archive.SetString( settings );
+    SimpleArchive text_archive;
+    text_archive.SetString( settings );
 
-	text_archive >> mInputChannel;
-	text_archive >> mBitRate;
+    text_archive >> mInputChannel;
 
-	ClearChannels();
-	AddChannel( mInputChannel, "NeoPixel", true );
+    ClearChannels();
+    AddChannel( mInputChannel, "NeoPixel", true );
 
-	UpdateInterfacesFromSettings();
+    UpdateInterfacesFromSettings();
 }
 
 const char* neopixelAnalyzerSettings::SaveSettings()
 {
-	SimpleArchive text_archive;
+    SimpleArchive text_archive;
 
-	text_archive << mInputChannel;
-	text_archive << mBitRate;
+    text_archive << mInputChannel;
 
-	return SetReturnString( text_archive.GetString() );
+    return SetReturnString( text_archive.GetString() );
 }
