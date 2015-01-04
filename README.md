@@ -10,3 +10,6 @@ http://incompleteattentionspan.blogspot.com.au/2015/01/logically-seeing-in-new-y
 The plugin is for the Beta version off the Salea Logic software which can be downloaded here:
 http://support.saleae.com/hc/en-us/articles/201589175-Logic-1-1-34-Beta
 
+Requires the SDK environment to compile. You can download this here:
+
+http://downloads.saleae.com/betas/1.1.32/SaleaeAnalyzerSdk-1.1.32.zip
